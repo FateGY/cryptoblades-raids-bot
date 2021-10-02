@@ -70,7 +70,7 @@ namespace RaidsBot
                                              ProtocolType.Tcp);
 
             // bind the listening socket to the port
-            IPEndPoint ep = new IPEndPoint(IPAddress.Loopback, port);
+            IPEndPoint ep = new IPEndPoint(IPAddress.Any, port);
             listenSocket.Bind(ep);
 
             // start listening
