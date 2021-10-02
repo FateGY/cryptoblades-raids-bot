@@ -22,6 +22,7 @@ namespace RaidsBot
             try
             {
                 Logger.Info("Booting up...");
+                Console.WriteLine("Test");
 
                 Logger.Info("ARGS:");
                 for(int i = 0; i < args.Length; i++)
@@ -37,11 +38,17 @@ namespace RaidsBot
                     .Build();
 
                 var web3Options = configuration.GetSection(Web3Options.Key).Get<Web3Options>();
+                if(web3Options.AccountPrivateKey.Length == 0)
+                    web3Options.AccountPrivateKey = Environment.GetEnvironmentVariable("ACCOUNT_PRIVATE_KEY");
                 var account = new Account(web3Options.AccountPrivateKey);
+
+                if (web3Options.RpcUrl.Length == 0)
+                    web3Options.RpcUrl = Environment.GetEnvironmentVariable("RPC_URL");
                 web3 = new Web3(account, web3Options.RpcUrl);
-                Logger.Info("KEY: "+ web3Options.AccountPrivateKey+" / "+ web3Options.RpcUrl);
 
                 var raidContractOptions = configuration.GetSection(RaidContractOptions.Key).Get<RaidContractOptions>();
+                if (raidContractOptions.Address.Length == 0)
+                    raidContractOptions.Address = Environment.GetEnvironmentVariable("RAID_CONTRACT_ADDRESS");
                 raidContractAddress = raidContractOptions.Address;
 
                 BigInteger raidIndex = await GetRaidIndex();
