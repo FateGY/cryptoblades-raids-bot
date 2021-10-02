@@ -70,8 +70,7 @@ namespace RaidsBot
                                              ProtocolType.Tcp);
 
             // bind the listening socket to the port
-            IPAddress hostIP = (Dns.GetHostEntry(IPAddress.Any.ToString())).AddressList[0];
-            IPEndPoint ep = new IPEndPoint(hostIP, port);
+            IPEndPoint ep = new IPEndPoint(IPAddress.Loopback, port);
             listenSocket.Bind(ep);
 
             // start listening
