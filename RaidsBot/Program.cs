@@ -171,10 +171,12 @@ namespace RaidsBot
 
         public static async Task<string> DoRaidAuto()
         {
+            DoRaidAutoFunction call = new DoRaidAutoFunction();
+            call.Gas = 500000; // 500k gas
             return await web3.Eth.GetContractTransactionHandler<DoRaidAutoFunction>()
                 .SendRequestAsync(
                     raidContractAddress,
-                    new DoRaidAutoFunction()
+                    call
             );
         }
     }
