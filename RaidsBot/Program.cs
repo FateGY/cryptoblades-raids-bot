@@ -5,6 +5,8 @@ using NLog;
 using RaidsBot.Options;
 using System;
 using System.Collections.Generic;
+using System.Net;
+using System.Net.Sockets;
 using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
@@ -43,6 +45,8 @@ namespace RaidsBot
                 raidContractOptions.Address = Environment.GetEnvironmentVariable("RAID_CONTRACT_ADDRESS");
             raidContractAddress = raidContractOptions.Address;
 
+            ListenToWeb();
+
             while (true)
             {
                 Console.WriteLine();
@@ -52,6 +56,27 @@ namespace RaidsBot
                 Console.WriteLine("Waiting "+waitMinutes+" mins...");
                 Thread.Sleep((int)waitMinutes * 1000 * 60);
             }
+        }
+
+        static void ListenToWeb()
+        {
+            Console.WriteLine("Setting up dummy web service...");
+            if (!int.TryParse(Environment.GetEnvironmentVariable("PORT"), out var port))
+            { port = 5000; }
+
+            // create the socket
+            Socket listenSocket = new Socket(AddressFamily.InterNetwork,
+                                             SocketType.Stream,
+                                             ProtocolType.Tcp);
+
+            // bind the listening socket to the port
+            IPAddress hostIP = (Dns.GetHostEntry(IPAddress.Any.ToString())).AddressList[0];
+            IPEndPoint ep = new IPEndPoint(hostIP, port);
+            listenSocket.Bind(ep);
+
+            // start listening
+            listenSocket.Listen(1);
+            Console.WriteLine("Dummy web service listening on port "+port);
         }
 
         static async Task<long> RaidTask()
