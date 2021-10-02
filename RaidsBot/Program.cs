@@ -79,20 +79,18 @@ namespace RaidsBot
 
                 if (timestamp > raidEndTime)
                 {
-                    if (timeDifference >= 60)
+                    Console.WriteLine("Raid over,");
+                    if (timeDifference < 30)
                     {
-                        Console.WriteLine("Raid over, calling doRaidAuto()");
-                        Console.WriteLine(await DoRaidAuto());
-                        Console.WriteLine("Success!");
-                        BigInteger waitMinutes = await GetRaidAutoDuration() + 1;
-                        return (long)waitMinutes;
+                        Console.WriteLine("Need to wait a few seconds for security.");
+                        Thread.Sleep(((int)timeDifference + 1) * 1000);
                     }
-                    else
-                    {
-                        BigInteger waitMinutes = timeDifference / 60 + 1;
-                        Console.WriteLine("Raid over but need more time for security.");
-                        return (long)waitMinutes;
-                    }
+
+                    Console.WriteLine("Calling doRaidAuto()");
+                    Console.WriteLine(await DoRaidAuto());
+                    Console.WriteLine("Success!");
+                    BigInteger waitMinutes = await GetRaidAutoDuration() + 1;
+                    return (long)waitMinutes;
                 }
                 else
                 {
