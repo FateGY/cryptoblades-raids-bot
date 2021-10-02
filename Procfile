@@ -1,0 +1,1 @@
+dotnet RaidsBot.dll
