@@ -34,11 +34,14 @@ namespace RaidsBot
             var web3Options = configuration.GetSection(Web3Options.Key).Get<Web3Options>();
             if (web3Options.AccountPrivateKey.Length == 0)
                 web3Options.AccountPrivateKey = Environment.GetEnvironmentVariable("ACCOUNT_PRIVATE_KEY");
-            var account = new Account(web3Options.AccountPrivateKey);
+            if (web3Options.ChainId == 0)
+                web3Options.ChainId = long.Parse(Environment.GetEnvironmentVariable("CHAIN_ID"));
+            var account = new Account(web3Options.AccountPrivateKey, web3Options.ChainId);
 
             if (web3Options.RpcUrl.Length == 0)
                 web3Options.RpcUrl = Environment.GetEnvironmentVariable("RPC_URL");
             web3 = new Web3(account, web3Options.RpcUrl);
+            web3.TransactionManager.UseLegacyAsDefault = true;
 
             var raidContractOptions = configuration.GetSection(RaidContractOptions.Key).Get<RaidContractOptions>();
             if (raidContractOptions.Address.Length == 0)

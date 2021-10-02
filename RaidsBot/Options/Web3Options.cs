@@ -6,5 +6,6 @@
 
         public string RpcUrl { get; set; }
         public string AccountPrivateKey { get; set; }
+        public long ChainId { get; set; }
     }
 }
