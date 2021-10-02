@@ -113,8 +113,12 @@ namespace RaidsBot
                     Console.WriteLine("Calling doRaidAuto()");
                     Console.WriteLine(await DoRaidAuto());
                     Console.WriteLine("Success!");
-                    BigInteger waitMinutes = await GetRaidAutoDuration() + 1;
-                    return (long)waitMinutes;
+                    BigInteger waitMinutes = await GetRaidAutoDuration();
+                    if(waitMinutes == 0)
+                    {
+                        waitMinutes = 480;
+                    }
+                    return (long)waitMinutes + 1;
                 }
                 else
                 {
