@@ -1,4 +1,6 @@
-﻿namespace RaidsBot.Options
+﻿using System.Numerics;
+
+namespace RaidsBot.Options
 {
     public class Web3Options
     {
