@@ -19,6 +19,7 @@ namespace RaidsBot
         
         public static Web3 web3;
         public static string raidContractAddress;
+        public static BigInteger gasPrice;
 
         static async Task Main(string[] args)
         {
@@ -36,6 +37,10 @@ namespace RaidsBot
                 web3Options.AccountPrivateKey = Environment.GetEnvironmentVariable("ACCOUNT_PRIVATE_KEY");
             if (web3Options.ChainId == 0)
                 web3Options.ChainId = long.Parse(Environment.GetEnvironmentVariable("CHAIN_ID"));
+            if (web3Options.GasPrice == 0)
+                web3Options.GasPrice = BigInteger.Parse(Environment.GetEnvironmentVariable("GAS_PRICE_WEI"));
+            gasPrice = web3Options.GasPrice;
+
             var account = new Account(web3Options.AccountPrivateKey, web3Options.ChainId);
 
             if (web3Options.RpcUrl.Length == 0)
@@ -180,6 +185,8 @@ namespace RaidsBot
         {
             DoRaidAutoFunction call = new DoRaidAutoFunction();
             call.Gas = 500000; // 500k gas
+            if(gasPrice != 0)
+                call.GasPrice = gasPrice;
             return await web3.Eth.GetContractTransactionHandler<DoRaidAutoFunction>()
                 .SendRequestAsync(
                     raidContractAddress,
