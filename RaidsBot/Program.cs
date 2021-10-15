@@ -37,9 +37,10 @@ namespace RaidsBot
                 web3Options.AccountPrivateKey = Environment.GetEnvironmentVariable("ACCOUNT_PRIVATE_KEY");
             if (web3Options.ChainId == 0)
                 web3Options.ChainId = long.Parse(Environment.GetEnvironmentVariable("CHAIN_ID"));
-            if (web3Options.GasPrice == 0)
-                web3Options.GasPrice = BigInteger.Parse(Environment.GetEnvironmentVariable("GAS_PRICE_WEI"));
+            if (web3Options.GasPrice == 0 && Environment.GetEnvironmentVariable("GAS_PRICE_WEI") != null)
+                web3Options.GasPrice = long.Parse(Environment.GetEnvironmentVariable("GAS_PRICE_WEI"));
             gasPrice = web3Options.GasPrice;
+            Console.WriteLine("Gas price set to: "+gasPrice);
 
             var account = new Account(web3Options.AccountPrivateKey, web3Options.ChainId);
 
